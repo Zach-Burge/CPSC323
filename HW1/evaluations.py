@@ -53,11 +53,11 @@ def compute_f1(actuals, preds):
 
     return f1
 
-def confusion_matrix(y_true, y_pred, labels):
+def confusion_matrix(actuals, preds, labels):
     matrix = [[0 for i in range(len(labels))] for i in range(len(labels))]
-    for i, val in enumerate(y_true):
+    for i, val in enumerate(actuals):
         try:
-            matrix[labels.index(val)][labels.index(y_pred[i])] += 1
+            matrix[labels.index(val)][labels.index(preds[i])] += 1
         except ValueError:
             pass
     return matrix
