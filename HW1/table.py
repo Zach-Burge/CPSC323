@@ -1,6 +1,7 @@
 from copy import copy
 import csv
 import copy
+from tabulate import tabulate
 
 class Table:
     """
@@ -43,3 +44,6 @@ class Table:
                 new_row.append(row[orig_table.column_names.index(name)])
             new_table.append(new_row)
         return new_table
+
+    def pretty_print(self):
+        print(tabulate(self.data, headers=self.column_names))
