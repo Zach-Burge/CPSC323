@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.model_selection import train_test_split
 
 class LinearRegressorModel:
     def __init__(self, slope=None, intercept=None):

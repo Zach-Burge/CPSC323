@@ -1,5 +1,46 @@
 from table import Table
+import numpy as np
 
+def train_test_split(X, y, test_size=0.33, random_state=None, shuffle=True):
+    if test_size < 1:
+        X_test_size = int(np.ceil(len(X)*test_size))
+        X_train_size = len(X) - X_test_size
+        y_test_size = int(np.ceil(len(y)*test_size))
+        y_train_size = len(y) - y_test_size
+    else:
+        X_test_size = test_size
+        X_train_size = len(y) - X_test_size
+        y_test_size = test_size
+        y_train_size = len(y) - y_test_size
+    
+    if shuffle:
+        X_shuffled = np.random.RandomState(random_state).permutation(len(X))
+        y_shuffled = np.random.RandomState(random_state).permutation(len(y))
+        X_test_indices = X_shuffled[:X_test_size]
+        X_test = [X[val] for val in X_test_indices]
+
+        X_train_indices = X_shuffled[X_test_size:]
+        X_train = [X[val] for val in X_train_indices]
+
+        y_test_indices = y_shuffled[:y_test_size]
+        y_test = [y[val] for val in y_test_indices]
+
+        y_train_indices = y_shuffled[y_test_size:]
+        y_train = [y[val] for val in y_train_indices]
+    else:
+        X_train_indices = np.arange(X_train_size)
+        X_train = [X[val] for val in X_train_indices]
+
+        X_test_indices = np.arange(X_train_size, len(X))
+        X_test = [X[val] for val in X_test_indices]
+
+        y_train_indices = np.arange(y_train_size)
+        y_train = [y[val] for val in y_train_indices]
+
+        y_test_indices = np.arange(y_train_size, len(y))
+        y_test = [y[val] for val in y_test_indices] 
+
+    return X_train, X_test, y_train, y_test
 
 def compute_accuracy(actuals, preds):
     correct_preds = 0
@@ -32,9 +73,9 @@ def compute_recall(actuals, preds):
     recall = 0
 
     for i in range(len(actuals)):
-        if preds[i] == '0' and actuals[i] == '0':
+        if preds[i] == 0 and actuals[i] == 0:
             true_pos += 1
-        elif preds[i] == '1' and actuals[i] == '0':
+        elif preds[i] == 1 and actuals[i] == 0:
             false_neg += 1
         else:
             pass

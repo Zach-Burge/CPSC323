@@ -35,11 +35,24 @@ class Table:
             col.append(row[col_id])
         return col
 
+    def drop_rows(self, row_indexes_to_drop):
+        row_indexes_to_drop.sort(reverse=True)
+        for value in row_indexes_to_drop:
+            self.data.pop(value)
+
+    def remove_rows_with_missing_values(self):
+        idxs = []
+        for i, row in enumerate(self.data):
+            for value in row:
+                if (value in ('NA', '')) and i not in idxs:
+                    idxs.append(i)
+        self.drop_rows(idxs)
+
     def convert_to_numeric(self, cols_to_convert):
         for row in self.data:
             for col in cols_to_convert:
                 try:
-                    row[self.column_names.index(col)] = float(row[self.column_names.index(col)])
+                    row[self.column_names.index(col)] = int(row[self.column_names.index(col)])
                 except ValueError:
                     pass
 
