@@ -9,6 +9,8 @@ class Game:
             self.grid.append([])
 
     # Method to print the grid
+    # Learned how to use end= from 'https://www.toppr.com/guides/python-guide/questions/what-does-end-do-in-python/#:~:text=The%20end%20parameter%20in%20the,the%20print%20statement%20in%20python.'
+    # Which gave me the idea to print the lists this way
     def show_grid(self):
         for i in range(self.num_blocks):
             print("[ ", end="")
@@ -49,6 +51,6 @@ class Game:
         while(self.is_solved() == False):
             self.move_blocks()
             moves += 1
-        print("Blocks world solved in", moves, "moves!")
+        print("Blocks world solved in", moves, "moves.")
 
             
