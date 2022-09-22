@@ -40,8 +40,7 @@ class Game:
             rand_loc = random.randrange(self.num_blocks)
             if self.grid[rand_loc] != []:
                 found = True
-                move_val = self.grid[rand_loc][-1]
-                self.grid[rand_loc][-1] = None
+                move_val = self.grid[rand_loc].pop()
         new_rand_loc = random.randrange(self.num_blocks)
         self.grid[new_rand_loc].append(move_val)
 
