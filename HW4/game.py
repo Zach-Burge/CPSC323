@@ -1,0 +1,97 @@
+from copy import deepcopy
+import random
+
+class Game:
+    def __init__(self, num_blocks):
+        self.num_blocks = num_blocks
+        self.grid = []
+        for i in range(num_blocks):
+            self.grid.append([])
+
+    # Method to print the grid
+    # Learned how to use end= from 'https://www.toppr.com/guides/python-guide/questions/what-does-end-do-in-python/#:~:text=The%20end%20parameter%20in%20the,the%20print%20statement%20in%20python.'
+    # Which gave me the idea to print the lists this way
+    def show_grid(self):
+        for row in self.grid:
+            print(row)
+        
+    # Initial game state 
+    def setup_blocks(self):
+        for i in range(1, self.num_blocks + 1):
+            rand_loc = random.randrange(self.num_blocks)
+            self.grid[rand_loc].append(i)
+    
+    # If the state of the blocks is [1, 2, 3, ..., num_blocks], the game is solved and this will return true
+    def is_solved(self, state):
+        solved = list(range(1, self.num_blocks + 1)) # [1, 2, 3, ..., num_blocks]
+        for row in state:
+            if row == solved:
+                return True
+        return False
+
+    # Finds a random value in the "grid" and chooses a new random location in the grid to move the value to
+    def move_blocks(self):
+        # found = False
+        # while not found:
+        #     rand_loc = random.randrange(self.num_blocks)
+        #     if self.grid[rand_loc] != []:
+        #         found = True
+        #         move_val = self.grid[rand_loc].pop()
+        # new_rand_loc = random.randrange(self.num_blocks)
+        # self.grid[new_rand_loc].append(move_val)
+        all_moves = self.find_possible_moves()
+        low_h = 10000
+        low_h_state = []
+        best_moves = []
+        for move in all_moves:
+            h = self.calculate_h()
+            if h < low_h:
+                low_h = h
+                low_h_state = move
+                best_moves.append(deepcopy(move))
+        # print(low_h_state)
+        return low_h_state
+
+    # Main game loop that counts the number of moves taken to solve the game
+    def solve(self):
+        moves = 0
+        low_state = self.grid
+        while(self.is_solved(low_state) == False):
+            low_state = self.move_blocks()
+            moves += 1
+        print("Blocks world solved in", moves, "moves.")
+
+    def calculate_h(self):
+        h = 0
+        for row in range(self.num_blocks):
+            if len(self.grid[row]) != 0:
+                if len(self.grid[row]) == 1:
+                    if self.grid[row][0] != 1:
+                        h += 1
+                else:
+                    if all(self.grid[row][i] < self.grid[row][i+1] for i in range(len(self.grid[row])-1)):
+                        h += 2
+                    else:
+                        h += 1
+                    i = 1
+                    while i < len(self.grid[row]):
+                        if self.grid[row][i] > self.grid[row][i-1]:
+                            h += 1
+                    h += 2
+        return h           
+
+    def find_possible_moves(self):
+        possible_moves = []
+        for row in range(len(self.grid)):
+            if len(self.grid[row]) != 0:
+                val = self.grid[row].pop()
+                for i in range(len(self.grid)):
+                    if i != row:
+                        cur_grid = deepcopy(self.grid)
+                        cur_grid[i].append(val)
+                        possible_moves.append(cur_grid)
+                self.grid[row].append(val)
+        return possible_moves
+
+
+            
