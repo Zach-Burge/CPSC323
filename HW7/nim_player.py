@@ -21,18 +21,8 @@ class NimPlayer:
                     possible_moves.append(temp_board)
         # use nim sum to get the best moves from the possible moves
         # ie if the nim sum is 0, it goes in best moves
-        if boardstate is not [1, 1, 1, 1]:
-            for move in possible_moves:
-                if move == [0, 1, 1, 1] or move == [1, 0, 1, 1] or move == [1, 1, 0, 1] or move == [1, 1, 1, 0]:
-                    possible_moves.remove(move)
-        for move in possible_moves:
-            if move == [1, 1, 1, 1]:
-                new_boardstate = move
-                return new_boardstate
-        print("possible moves:", possible_moves)
         for move in possible_moves:
             nim_sum = move[0] ^ move[1] ^ move[2] ^ move[3]
-            print("nimsum:", nim_sum)
             if nim_sum == 0:
                 best_moves.append(move)
 
@@ -45,12 +35,10 @@ class NimPlayer:
                 temp_board[idx] = row_nim
                 if temp_board not in best_moves:
                     best_moves.append(temp_board)
-                    break
-        print("best moves:", best_moves)       
+                    break       
         if best_moves != []:
             new_boardstate = best_moves[0]
         else:
             # if there are no best moves, choose a random move from the possible moves and make that
             new_boardstate = possible_moves[random.randrange(0, len(possible_moves)-1)]
-        print("new boardstate:", new_boardstate)
         return new_boardstate
